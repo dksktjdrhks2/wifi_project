@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="EUC-KR">
+		<title>전국 무료 와이파이</title>
+		<script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+		<script type="text/javascript">			
+			$(document).ready(function(){
+				$("input[name=id-input]").keyup(function(event){
+					idVal = $('.id_in').val();
+					pwVal = $('.pw_in').val();
+					if (!(event.keyCode >=37 && event.keyCode<=40)) {
+						var inputVal = $(this).val();
+						$(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
+					}
+					if(idVal.length > 4 && pwVal.length > 4 && pwVal != "비밀번호"){
+						subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#8bbbbd";
+					}else{
+						subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#e1e1e1";
+					}
+				});
+				$("input[name=pw-input]").keyup(function(event){
+					idVal = $('.id_in').val();
+					pwVal = $('.pw_in').val();
+					if (!(event.keyCode >=37 && event.keyCode<=40)) {
+						var inputVal = $(this).val();
+						$(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
+					}
+					if(idVal.length > 4 && pwVal.length > 4 && idVal != "아이디"){
+						subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#8bbbbd";
+					}else{
+						subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#e1e1e1";
+					}
+					if(pwVal.length < 5){
+					    $('.pw_err').text('패스워드 형식이 일치하지 않습니다.');
+					}else{
+						$('.pw_err').text('');
+					}
+				});
+			});
+	   
+			$(function(){
+				id = $('.id_in');
+				pw = $('.pw_in');
+				if(id.val() != "아이디"){
+					inpColor = document.getElementById("id-input");
+					inpColor.style.color = "black";
+				}
+				if(pw.val() != "비밀번호"){
+					inpColor = document.getElementById("pw-input");
+					inpColor.style.color = "black";
+				}
+				//id 포커스  얻을때
+				id.focus(function(){
+					if(id.val() == "아이디"){
+						id.val('');
+					}
+					divColor = document.getElementById("id_div");
+					divColor.style.border = "2px solid green";
+					inpColor = document.getElementById("id-input");
+					inpColor.style.color = "black";
+				});
+				pw.focus(function(){
+					if(pw.val() == "비밀번호"){
+						pw.val('');
+					}
+					divColor = document.getElementById("pw_div");
+					divColor.style.border = "2px solid green";
+					inpColor = document.getElementById("pw-input");
+					inpColor.style.color = "black";
+				});
+				// id 포커스 나갈때
+				id.blur(function(){
+				    if(id.val() != "" && pw.val() != "" && pw.val() != "비밀번호"){
+				    	subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#8bbbbd";
+				    }else{
+				    	subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#e1e1e1";
+				    }
+				    divColor = document.getElementById("id_div");
+				    divColor.style.border = "1px solid gray";
+				    idValue = id.val();
+				    idLen = idValue.length;
+				    if (idLen < 5) {
+				    	$('.id_err').text('아이디가 5글자이하 입니다.')
+				    }else{
+				    	$('.id_err').text('');
+				    }
+				});
+				pw.blur(function(){
+					if(id.val() != "" && pw.val() != ""){
+				    	subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#8bbbbd";
+				    }else{
+				    	subColor = document.getElementById("login_btn");
+						subColor.style.backgroundColor = "#e1e1e1";
+				    }
+					divColor = document.getElementById("pw_div");
+					divColor.style.border = "1px solid gray";
+				});
+			});
+		</script>
+		<style type="text/css">
+			body{
+				background-color: #E7E7E8;
+	            background-image: url('img/maps_back.png');
+	            background-size: 100%;
+	            background-repeat: no-repeat;
+	            background-attachment: fixed;
+	            background-position: 0px;
+			}
+			.square{
+				border: 1px solid white;
+				border-radius: 20px;
+				background: white;
+				width: 400px; height: 400px;
+				margin: 10%;
+				box-shadow: 10px 10px 60px #8bbbbd;
+			}
+			.square_input{
+				border: 1px solid gray;
+				border-radius: 10px;
+				background: white;
+				width: 300px; height: 50px;
+				margin: 5px;
+			}
+			input {
+				border: 1px solid white;
+				color: #c9c9c9;
+				outline: none;
+			}
+			#login_btn { border-radius: 10px; width: 300px; height: 50px; outline: none; } 
+		</style>
+	</head>
+	<body>
+		<div class="center" align="center">
+			<div class="square" align="center">
+			<form action="sign_in.jsp">
+				<table style="margin-top: 10%;">
+					<tr>
+						<td align="center"><img alt="" src="img/wi-fi.png" width="200" height="70"></td>
+					</tr>
+					
+					<tr>
+						<td>
+							<div class="square_input" align="center" id="id_div">
+								<input id="id-input" class="id_in" name="id" value="아이디" style="margin-top: 7px; width: 260px; height: 30px; font-size: 16px; font-weight: bold;">
+							</div>
+							<div class="id_err" style="color:red; font-size: 12px" align="center"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="square_input" align="center" id="pw_div">
+								<input type="password" id="pw-input" class="pw_in" name="pw" value="비밀번호" style="margin-top: 7px; width: 260px; height: 30px; font-size: 16px; font-weight: bold;">
+							</div>
+							<div class="pw_err" style="color:red; font-size: 12px" align="center"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<!-- 8bbbbd -->
+							<!-- <div name="submit-btn" id="submit-btn" class="square_input" style="border: 0; line-height: 50px; background: #e1e1e1;" align="center">
+								<font style="font-weight: bold; color: white;">로그인</font>
+							</div> -->
+							<div align="center">
+								<button id="login_btn" class="login_btn" style="font-size: 16px; font: monospace; background: #e1e1e1; color: #4a6363; font-weight: bold; border: none;">
+									로그인
+								</button>
+							</div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="color: black; font-size: 12px;">
+						<br>
+							<div align="center" style="font-size: 13px; font-weight: bold; color: gray">
+								<a href="wifi_signup.html" style="color: gray;">아직 회원이 아니십니까?</a><br><a href="wifi_findacc.html" style="color: gray;">계정을 찾으시겠습니까?</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

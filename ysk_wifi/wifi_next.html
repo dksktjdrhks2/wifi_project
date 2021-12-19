@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>전국 무료 와이파이 데이터</title>
+		<script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<style type="text/css">
+			body{
+				background-color: #E7E7E8;
+	            background-image: url('img/maps_back.png');
+	            background-repeat: no-repeat;
+	            background-size: 100%;
+	            background-attachment: fixed;
+	            background-position: 0px;
+			}
+			.left_bar{
+				border: 1px solid #8bbbbd;
+				float: left;
+				background: white;
+				border-radius: 20px;
+				height: 100%;
+				width: 400px;
+			}
+			.input_bar{
+				border: 1px solid #8bbbbd;
+				background: white;
+				border-radius: 20px;
+				margin-top: 50px;
+				height: 50px;
+				width: 350px;
+			}
+			.top_bar{
+				border: 1px solid #8bbbbd;
+				float:none;
+				background: white;
+				border-radius: 20px;
+				height: 100px;
+				margin-top: 10px;
+				width: 1400px;
+				margin-left: 320px;
+			}
+			.div_center{
+				border: 1px solid #8bbbbd;
+				border-radius: 20px;
+				float:none;
+				width: 1400px; height: 790px;
+				margin-left: 320px;
+				background: white;
+				margin-top: 10px;
+			}
+			#map {
+            height: 400px;  /* 높이는 400 픽셀 */
+            width: 100%;  /* 너비는 웹 페이지의 너비 */
+        	}
+        	.sel_btn{
+        		border: 1px solid #e1e1e1;
+				background: #e1e1e1;
+				border-radius: 20px;
+				margin-top: 20px;
+				height: 50px;
+				width: 350px;
+        	}
+        	.sel_btn:hover{
+        		border: 1px solid #8bbbbd;
+				background-color: #8bbbbd;
+				border-radius: 20px;
+				margin-top: 20px;
+				height: 50px;
+				width: 350px;
+        	}
+		</style>
+<script>
+    function initialize() {
+        $.ajax({
+            type: "GET", //전송방식을 지정한다 (POST,GET)
+            url: "wifi_s.jsp", //호출 URL을 설정한다. GET방식일경우 뒤에 파라티터를 붙여서 사용해도된다.
+            dataType: 'json',
+            error: function(xhr, status, error) {
+                console.log(xhr);
+                alert("xhr : " + xhr + "\nstatus : " + status + "\nerror : " + error);
+            },
+            success: function(result) {
+                itemsValues = result.records;
+                alert('데이터를 성공적으로 불러왔습니다.');
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 12,
+                    center: new google.maps.LatLng(37.549012, 126.988546),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                var infowindow = new google.maps.InfoWindow();
+                var marker, i;
+
+                for (i = 0; i < itemsValues.length; i++) {
+                    marker = new google.maps.Marker({
+                        id: i,
+                        position: new google.maps.LatLng(itemsValues[i].위도, itemsValues[i].경도),
+                        map: map
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent(itemsValues[i].설치장소명);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+
+                    if (marker) {
+                        marker.addListener('click', function() {
+                            map.setZoom(15);
+                            map.setCenter(this.getPosition());
+                        });
+                    }
+                }
+            }
+        });
+    }
+    function reset() {
+        $.ajax({
+            type: "GET", //전송방식을 지정한다 (POST,GET)
+            url: "wifi_s.jsp", //호출 URL을 설정한다. GET방식일경우 뒤에 파라티터를 붙여서 사용해도된다.
+            dataType: 'json',
+            error: function(xhr, status, error) {
+                console.log(xhr);
+                alert("xhr : " + xhr + "\nstatus : " + status + "\nerror : " + error);
+            },
+            success: function(result) {
+                itemsValues = result.records;
+                for (i = 0; i < itemsValues.length; i++) {
+                	if(itemsValues[i].설치시도명 == $('#korea').val()){
+		                var map = new google.maps.Map(document.getElementById('map'), {
+		                    zoom: 8,
+		                    center: new google.maps.LatLng(itemsValues[i].위도, itemsValues[i].경도),
+		                    mapTypeId: google.maps.MapTypeId.ROADMAP
+		                });
+		                break;
+                	}
+                }
+                var infowindow = new google.maps.InfoWindow();
+                var marker, i;
+
+                for (i = 0; i < itemsValues.length; i++) {
+                	if(itemsValues[i].설치시도명 == $('#korea').val()){
+	                    marker = new google.maps.Marker({
+	                        id: i,
+	                        position: new google.maps.LatLng(itemsValues[i].위도, itemsValues[i].경도),
+	                        map: map
+	                    });
+	
+	                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+	                        return function() {
+	                            infowindow.setContent(itemsValues[i].설치장소명);
+	                            infowindow.open(map, marker);
+	                        }
+	                    })(marker, i));
+	
+	                    if (marker) {
+	                        marker.addListener('click', function() {
+	                            map.setZoom(15);
+	                            map.setCenter(this.getPosition());
+	                        });
+	                    }
+	                }
+                }
+            }
+        });
+    }
+    </script>
+	</head>
+	<body onload="initialize()">
+		<div class="main_div" style="width: 1920px; height: 900px; margin: 10px" align="center">
+			<div class="left_bar">
+				<img alt="" src="img/wi-fi.png" style="margin-top: 10px;">
+				<div class="input_bar">
+					<select id="korea" name="job" style="height: 80%; width: 90%; text-align: center; font-size: 20px; border:none; margin-top: 5px;">
+						<optgroup label="시/도">
+					    <option value="서울특별시">서울</option>
+					    <option value="인천광역시">인천</option>
+					    <option value="경기도">경기도</option>
+					    <option value="강원도">강원도</option>
+					    <option value="충청북도">충청북도</option>
+					    <option value="충청남도">충청남도</option>
+					    <option value="전라남도">전라남도</option>
+					    <option value="전라북도">전라북도</option>
+					    <option value="경상남도">경상남도</option>
+					    <option value="경상북도">경상북도</option>
+					    <option value="제주특별자치도">제주도</option>
+					    </optgroup>
+					    <optgroup label="시">
+					    <option value="부산광역시">부산</option>
+					    <option value="울산광역시">울산</option>
+					    <option value="광주광역시">광주</option>
+					    <option value="대구광역시">대구</option>
+					    <option value="세종특별자치시">세종</option>
+					    <option value="대전광역시">대전</option>
+					    </optgroup>
+					</select>
+					<button class="sel_btn" type="button" onclick="reset()" style="font-size: 20px;">설정</button>
+				</div>
+			</div>
+			<div class="top_bar">
+				<font style="font-size: 65px; font-weight: bold; color: #56b7ba;">전국 무료 와이파이 표준 데이터</font>
+			</div>
+			<div class="div_center">
+				<div id="map" style="height: 100%; border-radius: 20px;"></div>
+			</div>
+		</div>
+	</body>
+</html>

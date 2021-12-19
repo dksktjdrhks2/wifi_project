@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>회원 가입</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="webcss.css" />
+	<script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+		birthBool = false;
+		genderBool = false;
+		genVal = null;
+		function enable() {
+			$('#signup_btn').prop('disabled', false);
+			subColor = document.getElementById("signup_btn");
+			subColor.style.backgroundColor = "#8bbbbd";
+		}
+		function disable() {
+			$('#signup_btn').prop('disabled', true);
+			subColor = document.getElementById("signup_btn");
+			subColor.style.backgroundColor = "#e1e1e1";
+		}
+		$(function(){
+			birth = $('#datepicker');
+			bVal = $('#datepicker').val();
+		});
+		$(document).ready(function() {
+		    $( "#datepicker" ).datepicker({
+		      	changeMonth: true,
+		      	changeYear: true
+		    });
+		}
+		setInterval(function() {
+			checksum();
+		}, 1000);
+		function checksum() {
+			dVal = $('#datepicker').val();
+			
+			if(dVal != ""){birthBool = true;}
+			else{birthBool = false;}
+			
+			if(genVal != "" && genVal != null){genBool = true;}
+			else{genBool = false;}
+			
+			if(genBool && birthBool){enable();}
+			else{disable();}
+		}
+		function male() {
+			genVal = 'male';
+		}
+		function female() {
+			genVal = 'female'
+		}
+	</script>
+	<style>
+		body{
+				background-color: #E7E7E8;
+	            background-image: url('img/maps_back.png');
+	            background-size: 100%;
+	            background-repeat: no-repeat;
+	            background-attachment: fixed;
+	            background-position: 0px;
+			}
+			.square{
+				border: 1px solid white;
+				border-radius: 20px;
+				background: white;
+				width: 400px; height: 300px;
+				margin: 15%;
+				box-shadow: 10px 10px 60px #8bbbbd;
+			}
+			.square_input{
+				border: 1px solid gray;
+				border-radius: 10px;
+				background: white;
+				width: 300px; height: 50px;
+				margin: 5px;
+			}
+			input {
+				border: 1px solid white;
+				color: #c9c9c9;
+				outline: none;
+			}
+		.gen_cir{
+			border: 2px solid gray;
+			width: 20px; height: 20px;
+			border-radius: 10px;
+		}
+		.radio_btn{
+			border: none;
+		}
+		#signup_btn { 
+		border-radius: 10px;
+		width: 300px; 
+		height: 50px; 
+		outline: none;
+		font-size: 16px; 
+		font: monospace; 
+		background: #e1e1e1; 
+		color: #4a6363; 
+		font-weight: bold; 
+		border: none; 
+		margin-top: 5%; } 
+		#signup_btn:hover { border-radius: 10px; width: 300px; height: 50px; outline: none; background: #8bbbbd; } 
+		#datepicker {
+			border: 1px solid gray;
+			border-radius: 10px;
+			background: white;
+			width: 300px; height: 50px;
+			color: black;
+		}
+	</style>
+	<body>
+		<div class="center" align="center">
+			<div class="square" align="center" style="font-weight: bold; font: monospace;">
+			<form action="findacc.jsp">
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">생년 월일</div>
+				<input name="birth" type="text" id="datepicker" style="text-align: center;">
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">성별</div>
+				<div>
+				<input type="radio" name="gender" value="male" style="font-size:17px; width:23px;height:23px" onclick="male()">남
+				<input type="radio" name="gender" value="female" style="font-size:17px; width:23px;height:23px" onclick="female()">여<br>
+				<button type="submit" id="signup_btn" class="signup_btn">
+					정보 찾기
+				</button>
+				</div>
+			</form>	
+			</div>
+		</div>
+	</body>
+</html>

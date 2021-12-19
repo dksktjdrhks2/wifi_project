@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>회원 가입</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="webcss.css" />
+	<script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+		idBool = false;
+		pwBool = false;
+		birthBool = false;
+		genderBool = false;
+		genVal = null;
+		function enable() {
+			$('#signup_btn').prop('disabled', false);
+			subColor = document.getElementById("signup_btn");
+			subColor.style.backgroundColor = "#8bbbbd";
+		}
+		function disable() {
+			$('#signup_btn').prop('disabled', true);
+			subColor = document.getElementById("signup_btn");
+			subColor.style.backgroundColor = "#e1e1e1";
+		}
+		$(function(){
+			id = $('.id_in');
+			pw = $('.pw_in');
+			pwre = $('.pw_in_re');
+			birth = $('#datepicker');
+			bVal = $('#datepicker').val();
+			if(id.val() != "아이디"){
+				inpColor = document.getElementById("id-input");
+				inpColor.style.color = "black";
+			}
+			if(pw.val() != "비밀번호"){
+				inpColor = document.getElementById("pw-input");
+				inpColor.style.color = "black";
+			}
+			if(pwre.val() != "비밀번호 확인"){
+				inpColor = document.getElementById("pw-input");
+				inpColor.style.color = "black";
+			}
+			//id 포커스  얻을때
+			id.focus(function(){
+				if(id.val() == "아이디"){
+					id.val('');
+				}
+				divColor = document.getElementById("id_div");
+				divColor.style.border = "2px solid green";
+				inpColor = document.getElementById("id-input");
+				inpColor.style.color = "black";
+			});
+			pw.focus(function(){
+				if(pw.val() == "비밀번호"){
+					pw.val('');
+				}
+				divColor = document.getElementById("pw_div");
+				divColor.style.border = "2px solid green";
+				inpColor = document.getElementById("pw-input");
+				inpColor.style.color = "black";
+			});
+			pwre.focus(function(){
+				if(pwre.val() == "비밀번호 확인"){
+					pwre.val('');
+				}
+				divColor = document.getElementById("pwre_div");
+				divColor.style.border = "2px solid green";
+				inpColor = document.getElementById("pw-input-re");
+				inpColor.style.color = "black";
+			});
+			// id 포커스 나갈때
+			id.blur(function(){
+			    if(id.val() != ""){
+					idBool = true;
+			    }else{
+			    	idBool = false;
+			    }
+			    divColor = document.getElementById("id_div");
+			    divColor.style.border = "1px solid gray";
+			});
+			pw.blur(function(){
+				if(pw.val() != "" && pwre.val() != "비밀번호" && pwre.val() == pw.val()){
+					pwBool = true;
+			    }else{
+			    	pwBool = false;
+			    }
+				divColor = document.getElementById("pw_div");
+				divColor.style.border = "1px solid gray";
+			});
+			pwre.blur(function(){
+				if(pwre.val() != "" && pwre.val() != "비밀번호 확인" && pwre.val() == pw.val()){
+					pwBool = true;
+			    }else{
+			    	pwBool = false;
+			    }
+				divColor = document.getElementById("pwre_div");
+				divColor.style.border = "1px solid gray";
+			});
+			birth.blur(function(){
+				if(birth.val() != ""){
+					birthBool = true;
+			    }else{
+			    	birthBool = false;
+			    }
+			});
+		});
+		$(document).ready(function() {
+		    $( "#datepicker" ).datepicker({
+		      	changeMonth: true,
+		      	changeYear: true
+		    });
+			$("input[name=id]").keyup(function(event){
+				idVal = $('.id_in').val();
+				bVal = $('#datepicker').val();
+				if (!(event.keyCode >=37 && event.keyCode<=40)) {
+					var inputVal = $(this).val();
+					$(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
+				}
+				if(idVal.length > 4){
+					idBool = true;
+					$('.id_err').text('');
+				}else{
+					idBool = false;
+					$('.id_err').text('아이디가 5글자 이상이어야 합니다.');
+				}
+			});
+			$("input[name=pw]").keyup(function(event){
+				pwVal = $('.pw_in').val();
+				if (!(event.keyCode >=37 && event.keyCode<=40)) {
+					var inputVal = $(this).val();
+					$(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
+				}
+				if(pwVal.length > 4){
+					pwBool = true;
+					$('.pw_err').text('');
+				}else{
+					pwBool = false;
+					$('.pw_err').text('패스워드 형식이 일치하지 않습니다.');
+				}
+			});
+			$("input[id=pw-input-re]").keyup(function(event){
+				idVal = $('.id_in').val();
+				pwVal = $('.pw_in').val();
+				pwreVal = $('.pw_in_re').val();
+				if (!(event.keyCode >=37 && event.keyCode<=40)) {
+					var inputVal = $(this).val();
+					$(this).val(inputVal.replace(/[^a-z0-9]/gi,''));
+				}
+				if(pwreVal.length < 5){
+					$('.pw_re_err').text('패스워드 형식이 일치하지 않습니다.');
+					pwBool = false;
+					if(pwVal != pwreVal){
+				    	$('.pw_re_err').text('패스워드와 일치하지 않습니다.');
+				    	pwBool = false;
+					}else{
+						$('.pw_re_err').text('');
+						pwBool = true;
+					}
+				}else{
+					$('.pw_re_err').text('');
+					pwBool = true;
+				}
+			});
+		});
+		setInterval(function() {
+			checksum();
+		}, 1000);
+		function checksum() {
+			idVal = $('.id_in').val();
+			pwVal = $('.pw_in').val();
+			pwreVal = $('.pw_in_re').val();
+			dVal = $('#datepicker').val();
+			
+			if(idVal != null && idVal.length > 4){idBool = true;}
+			else{idBool = false;}
+			
+			if(pwVal != null && pwVal == pwreVal && pwVal.length >= 5){pwBool = true;}
+			else{pwBool = false;}
+			
+			if(dVal != ""){birthBool = true;}
+			else{birthBool = false;}
+			
+			if(genVal != "" && genVal != null){genBool = true;}
+			else{genBool = false;}
+			
+			if(idBool && pwBool && genBool && birthBool){enable();}
+			else{disable();}
+		}
+		function male() {
+			genVal = 'male';
+		}
+		function female() {
+			genVal = 'female'
+		}
+	</script>
+	<style>
+		body{
+				background-color: #E7E7E8;
+	            background-image: url('img/maps_back.png');
+	            background-size: 100%;
+	            background-repeat: no-repeat;
+	            background-attachment: fixed;
+	           	background-position: 0px;
+		}
+		.square{
+				border: 1px solid white;
+				border-radius: 20px;
+				background: white;
+				width: 400px; height: 570px;
+				margin-top: 3%;
+				box-shadow: 10px 10px 60px #8bbbbd;
+				margin-top: 10%;
+		}
+		.square_input{
+				border: 1px solid gray;
+				border-radius: 10px;
+				background: white;
+				width: 300px; height: 50px;
+		}
+		input {
+			border: 1px solid white;
+			color: #c9c9c9;
+			outline: none;
+		}
+		.gen_cir{
+			border: 2px solid gray;
+			width: 20px; height: 20px;
+			border-radius: 10px;
+		}
+		.radio_btn{
+			border: none;
+		}
+		#signup_btn { border-radius: 10px; width: 300px; height: 50px; outline: none; } 
+		#datepicker {
+			border: 1px solid gray;
+			border-radius: 10px;
+			background: white;
+			width: 300px; height: 50px;
+			color: black;
+		}
+	</style>
+	<body>
+		<div class="center" align="center">
+			<div class="square" align="center" style="font-weight: bold; font: monospace;">
+			<form action="sign_up.jsp">
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">아이디</div>
+				<div class="square_input" id="id_div">
+					<input name="id" id="id-input" class="id_in" value="아이디" style="margin-top: 7px; width: 260px; height: 30px; font-size: 16px; font-weight: bold;">
+				</div>
+				<div id="id_err" class="id_err" style="color:red; font-size: 12px" align="center"></div>
+				<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">비밀번호</div>
+				<div class="square_input" id="pw_div">
+					<input type="password" name="pw" id="pw-input" class="pw_in" value="비밀번호" style="margin-top: 7px; width: 260px; height: 30px; font-size: 16px; font-weight: bold;">
+				</div>
+				<div id="pw_err" class="pw_err" style="color:red; font-size: 12px" align="center"></div>
+				<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">비밀번호 확인</div>
+				<div class="square_input" id="pwre_div">
+					<input type="password" id="pw-input-re" class="pw_in_re" value="비밀번호 확인" style="margin-top: 7px; width: 260px; height: 30px; font-size: 16px; font-weight: bold;">
+				</div>
+				<div id="pw_re_err" class="pw_re_err" style="color:red; font-size: 12px" align="center"></div>
+				<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">생년 월일</div>
+				<input name="birth" type="text" id="datepicker" style="text-align: center;">
+				<div style="color: #56b7ba; margin-top: 5%; margin-bottom: 1%;">성별</div>
+				<div>
+				<input type="radio" name="gender" value="male" style="font-size:17px; width:23px;height:23px" onclick="male()">남
+				<input type="radio" name="gender" value="female" style="font-size:17px; width:23px;height:23px" onclick="female()">여<br>
+				<button type="submit" id="signup_btn" class="signup_btn" style="font-size: 16px; font: monospace; background: #e1e1e1; color: #4a6363; font-weight: bold; border: none; margin-top: 5%">
+					회원 가입
+				</button>
+				</div>
+			</form>	
+			</div>
+		</div>
+	</body>
+</html>
